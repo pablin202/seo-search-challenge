@@ -4,6 +4,14 @@
 **Author:** Pablo
 **Date:** November 14, 2025
 
+## 🚀 Live Demo
+
+**👉 [VIEW LIVE PROJECT](https://seo-search-challenge.vercel.app/)** 👈
+
+Try it yourself! Test all the examples with Ctrl+F and see the differences in real-time.
+
+---
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -21,12 +29,14 @@
 
 ## 🎯 Overview
 
-This project demonstrates the critical differences between **WRONG** and **CORRECT** implementations for common web components (Tabs, Accordions, Modals) regarding:
+This **interactive web application** demonstrates the critical differences between **WRONG** and **CORRECT** implementations for common web components (Tabs, Accordions, Modals) regarding:
 
 - **SEO (Search Engine Optimization)**
 - **Browser Search (Ctrl+F / Cmd+F)**
 - **Accessibility**
 - **User Experience**
+
+**🌐 Live Demo:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
 
 ### Why This Matters
 
@@ -171,19 +181,34 @@ seo-search-challenge/
 
 ## 🚀 How to Run
 
-1. **Install dependencies:**
+### Option 1: View Online (Recommended)
+
+**👉 Visit the live demo:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
+
+No installation required! Try all examples directly in your browser.
+
+### Option 2: Run Locally
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/seo-search-challenge.git
+   cd seo-search-challenge
+   ```
+
+2. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-2. **Start development server:**
+3. **Start development server:**
 
    ```bash
    npm run dev
    ```
 
-3. **Open in browser:**
+4. **Open in browser:**
    ```
    http://localhost:5173
    ```
@@ -191,6 +216,8 @@ seo-search-challenge/
 ---
 
 ## 🧪 How to Test
+
+**🌐 Try it live:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
 
 ### Testing SEO (View Source)
 
@@ -377,18 +404,39 @@ This project successfully demonstrates:
 
 ---
 
+## 🌐 Deployment
+
+This project is deployed on **Vercel** for easy access and demonstration.
+
+**Live URL:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
+
+### Deploy Your Own
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/seo-search-challenge)
+
+---
+
 ## 📞 Contact
 
 **Author:** Pablo Molina
 **Project:** Performance Improvement Plan (PIP)
 **Challenge:** SEO & Browser Search Implementation
 **Date:** November 14, 2025
+**Live Demo:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
 
 ---
 
 ## 📝 License
 
 This is an educational project for learning purposes.
+
+---
+
+## 🎯 Quick Links
+
+- **🌐 Live Demo:** [https://seo-search-challenge.vercel.app/](https://seo-search-challenge.vercel.app/)
+- **📚 Documentation:** [This README](README.md)
+- **💻 Source Code:** [GitHub Repository](https://github.com/yourusername/seo-search-challenge)
 
 ---
 
