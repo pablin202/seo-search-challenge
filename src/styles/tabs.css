@@ -1,0 +1,158 @@
+.tabs-container {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  background: white;
+}
+
+.tabs-container.wrong {
+  border-color: #ff5252;
+  background: #fff5f5;
+}
+
+.tabs-container.correct {
+  border-color: #4caf50;
+  background: #f1f8f4;
+}
+
+.warning-badge {
+  display: inline-block;
+  background: #ff5252;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.success-badge {
+  display: inline-block;
+  background: #4caf50;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.tabs button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.tabs button.active {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.tabs button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #2196f3;
+}
+
+.tab-content {
+  padding: 20px 0;
+  min-height: 150px;
+}
+
+.description {
+  color: #666;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.problem-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 82, 82, 0.1);
+  border-left: 4px solid #ff5252;
+  border-radius: 4px;
+}
+
+.solution-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+}
+
+.problem-explanation ul,
+.solution-explanation ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.problem-explanation li,
+.solution-explanation li {
+  margin: 5px 0;
+}
+
+/* Tab Panels - CSS-based visibility */
+.tab-panel {
+  transition: opacity 0.3s ease;
+}
+
+.tab-panel.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+}
+
+.tab-panel.hidden {
+  /* Off-screen positioning for SEO and Ctrl+F */
+  /* Classic technique - compatible with all browsers */
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.tab-panel.clip-hidden {
+  /* Modern clip-path technique for hiding content */
+  /* Note: We DON'T use visibility:hidden or display:none
+     because they prevent Ctrl+F from finding the text */
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Keyboard shortcut styling */
+kbd {
+  background: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 14px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}

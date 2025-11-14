@@ -1,0 +1,141 @@
+/* Accordion Container Styles */
+.accordion-container {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  background: white;
+}
+
+.accordion-container.wrong {
+  border-color: #ff5252;
+  background: #fff5f5;
+}
+
+.accordion-container.correct {
+  border-color: #4caf50;
+  background: #f1f8f4;
+}
+
+/* Accordion Items */
+.accordion {
+  margin: 20px 0;
+}
+
+.accordion-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.accordion-button {
+  width: 100%;
+  padding: 15px 20px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.accordion-button:hover {
+  background: #f5f5f5;
+}
+
+.accordion-button.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.accordion-icon {
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+  min-width: 20px;
+  text-align: center;
+}
+
+.accordion-button.active .accordion-icon {
+  color: #1976d2;
+}
+
+/* Accordion Content - Different techniques */
+.accordion-content {
+  padding: 0 20px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.accordion-content p {
+  padding: 15px 0;
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* For Wrong approach - display: none is inline */
+
+/* For Correct approach with off-screen technique */
+.accordion-content.off-screen {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.accordion-content.visible {
+  position: relative;
+  left: 0;
+  width: auto;
+  height: auto;
+  max-height: 500px;
+  overflow: visible;
+}
+
+/* For hidden="until-found" approach - browser handles most styling */
+/* NO CSS needed - browser handles hidden="until-found" natively */
+
+/* Explanation boxes */
+.problem-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 82, 82, 0.1);
+  border-left: 4px solid #ff5252;
+  border-radius: 4px;
+}
+
+.solution-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+}
+
+.problem-explanation ul,
+.solution-explanation ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.problem-explanation li,
+.solution-explanation li {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.problem-explanation code,
+.solution-explanation code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+}
