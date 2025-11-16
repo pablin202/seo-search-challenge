@@ -17,6 +17,7 @@ Try it yourself! Test all the examples with Ctrl+F and see the differences in re
 - [Overview](#overview)
 - [The Problem](#the-problem)
 - [Solutions Implemented](#solutions-implemented)
+- [Guidelines for New Developers](#-guidelines-for-new-developers)
 - [Project Structure](#project-structure)
 - [How to Run](#how-to-run)
 - [How to Test](#how-to-test)
@@ -148,6 +149,30 @@ This project demonstrates **8 different approaches** across 3 component types:
 - **Result:** SEO ✅ | Ctrl+F ✅
 
 ---
+
+## 🎯 Guidelines for New Developers
+
+### ✅ DO's:
+
+- Always render all content in the DOM
+- Use CSS to hide inactive content (position: absolute + off-screen)
+- Use inert attribute for modals when closed
+- Add proper ARIA attributes (aria-hidden)
+- Test with Ctrl+F before merging PRs
+
+### ❌ DON'Ts:
+
+- Never use conditional rendering for SEO-critical content
+- Avoid display: none for searchable content
+- Don't rely on hidden="until-found" for production (experimental)
+- Never hide content that Google needs to index
+
+### 🧪 How to Verify Your Implementation:
+
+1. Open your page in the browser
+2. Right-click → "View Page Source"
+3. Search for your content → Should be in the HTML ✅
+4. Press Ctrl+F → Should find content even when hidden ✅
 
 ## 📁 Project Structure
 
@@ -305,14 +330,14 @@ useEffect(() => {
 
 ## 📊 Techniques Comparison
 
-| Technique                           | In DOM? | SEO Indexed? | Ctrl+F Works?        | Use Case               |
-| ----------------------------------- | ------- | ------------ | -------------------- | ---------------------- |
-| **Conditional Rendering**           | ❌ No   | ❌ No        | ❌ No                | Avoid for SEO content  |
-| **display: none**                   | ✅ Yes  | ⚠️ Partial   | ❌ No                | Avoid for SEO content  |
-| **position: absolute + off-screen** | ✅ Yes  | ✅ Yes       | ✅ Yes               | Tabs, Modals (Classic) |
-| **clip-path: inset(50%)**           | ✅ Yes  | ✅ Yes       | ✅ Yes               | Tabs (Modern)          |
-| **hidden="until-found"**            | ✅ Yes  | ✅ Yes       | ⚠️ Experimental (buggy) | Educational only |
-| **inert attribute**                 | ✅ Yes  | ✅ Yes       | ✅ Yes               | Modals (Modern)        |
+| Technique                           | In DOM? | SEO Indexed? | Ctrl+F Works?           | Use Case               |
+| ----------------------------------- | ------- | ------------ | ----------------------- | ---------------------- |
+| **Conditional Rendering**           | ❌ No   | ❌ No        | ❌ No                   | Avoid for SEO content  |
+| **display: none**                   | ✅ Yes  | ⚠️ Partial   | ❌ No                   | Avoid for SEO content  |
+| **position: absolute + off-screen** | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Tabs, Modals (Classic) |
+| **clip-path: inset(50%)**           | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Tabs (Modern)          |
+| **hidden="until-found"**            | ✅ Yes  | ✅ Yes       | ⚠️ Experimental (buggy) | Educational only       |
+| **inert attribute**                 | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Modals (Modern)        |
 
 ---
 
