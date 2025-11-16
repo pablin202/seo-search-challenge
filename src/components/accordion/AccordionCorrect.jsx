@@ -38,30 +38,38 @@ function AccordionCorrect() {
     // Set up beforematch event listeners for each content section
     const handlers = [];
 
-    contentRefs.current.forEach((ref, index) => {
-      if (ref) {
-        const handleBeforeMatch = () => {
-          console.log(`beforematch event fired for item ${index}`);
-          // Automatically open the accordion item when found via Ctrl+F
-          setOpenItems(prev => {
-            const newSet = new Set(prev);
-            newSet.add(index);
-            return newSet;
-          });
-        };
+    // Wait for next tick to ensure refs are assigned
+    const timeoutId = setTimeout(() => {
+      contentRefs.current.forEach((ref, index) => {
+        if (ref) {
+          const handleBeforeMatch = (event) => {
+            console.log(`beforematch event fired for item ${index}`, event);
+            // Automatically open the accordion item when found via Ctrl+F
+            setOpenItems(prev => {
+              const newSet = new Set(prev);
+              newSet.add(index);
+              console.log(`Opening accordion item ${index}`, newSet);
+              return newSet;
+            });
+          };
 
-        ref.addEventListener('beforematch', handleBeforeMatch);
-        handlers.push({ ref, handler: handleBeforeMatch });
-      }
-    });
+          ref.addEventListener('beforematch', handleBeforeMatch);
+          handlers.push({ ref, handler: handleBeforeMatch });
+          console.log(`Added beforematch listener to accordion item ${index}`);
+        }
+      });
+    }, 0);
 
     // Cleanup
     return () => {
+      clearTimeout(timeoutId);
       handlers.forEach(({ ref, handler }) => {
-        ref.removeEventListener('beforematch', handler);
+        if (ref) {
+          ref.removeEventListener('beforematch', handler);
+        }
       });
     };
-  }, []);
+  }, [items]);
 
   const toggleItem = (index) => {
     setOpenItems(prev => {
@@ -77,19 +85,19 @@ function AccordionCorrect() {
 
   return (
     <div className="accordion-container correct">
-      <div className="success-badge" style={{ background: '#ff9800' }}>⚠️ EXPERIMENTAL (RARELY WORKS)</div>
+      <div className="success-badge" style={{ background: '#4caf50' }}>✅ MODERN WITH AUTO-REVEAL</div>
 
-      <h3>Accordion - hidden="until-found" (Experimental)</h3>
+      <h3>Accordion - hidden="until-found" (Modern Browsers)</h3>
 
-      <p className="description" style={{ color: '#ff6b6b', fontWeight: 'bold', background: '#fff5f5', padding: '15px', borderRadius: '4px', marginBottom: '10px' }}>
-        ⚠️ <strong>REALITY CHECK:</strong> This feature is extremely experimental
+      <p className="description" style={{ color: '#2196f3', fontWeight: 'bold', background: '#e3f2fd', padding: '15px', borderRadius: '4px', marginBottom: '10px' }}>
+        ℹ️ <strong>Browser Requirements:</strong> Chrome 102+, Edge 102+, Safari 17+, Firefox 139+
         <br />
-        Auto-reveal rarely works even in "supported" browsers
+        ✅ Auto-expand works when implemented correctly with setAttribute
         <br />
-        <strong>Ctrl+F WILL find text, but won't auto-expand</strong>
+        <strong>Try Ctrl+F and search for "fuel" - watch it auto-expand!</strong>
         <br />
         <br />
-        👉 <strong>Use "Correct (Off-Screen)" for reliable results!</strong>
+        💡 <strong>Note:</strong> For older browsers, use "Correct (Off-Screen)" instead
       </p>
 
       <div className="accordion">
@@ -109,37 +117,36 @@ function AccordionCorrect() {
               </button>
 
               {/* ✅ HIDDEN="UNTIL-FOUND" - Searchable AND auto-reveals */}
-              {isOpen ? (
-                <div
-                  ref={el => contentRefs.current[index] = el}
-                  className="accordion-content"
-                >
-                  <p>{item.content}</p>
-                </div>
-              ) : (
-                <div
-                  ref={el => contentRefs.current[index] = el}
-                  className="accordion-content"
-                  hidden="until-found"
-                >
-                  <p>{item.content}</p>
-                </div>
-              )}
+              <div
+                ref={el => {
+                  contentRefs.current[index] = el;
+                  if (el) {
+                    if (!isOpen) {
+                      el.setAttribute('hidden', 'until-found');
+                    } else {
+                      el.removeAttribute('hidden');
+                    }
+                  }
+                }}
+                className="accordion-content"
+              >
+                <p>{item.content}</p>
+              </div>
             </div>
           );
         })}
       </div>
 
       <div className="solution-explanation">
-        <strong>⚠️ Reality of hidden="until-found":</strong>
+        <strong>✅ How hidden="until-found" works:</strong>
         <ul>
-          <li>✅ Ctrl+F CAN find text (works!)</li>
+          <li>✅ Ctrl+F CAN find text - works perfectly!</li>
           <li>✅ Content in DOM - Google can index it</li>
-          <li>❌ Auto-reveal is extremely buggy/unreliable</li>
-          <li>❌ Even "supported" browsers often don't expand</li>
-          <li>📚 Great for research/learning</li>
-          <li>🚫 <strong>NOT recommended for production</strong></li>
-          <li>👉 <strong>Use Off-Screen approach instead</strong></li>
+          <li>✅ Auto-reveal works with beforematch event</li>
+          <li>⚠️ Requires setAttribute (React props don't work)</li>
+          <li>⚠️ Only Chrome 102+, Edge 102+, Safari 17+, Firefox 139+</li>
+          <li>💡 Check console for "beforematch event fired" logs</li>
+          <li>👉 <strong>For older browsers:</strong> Use Off-Screen approach</li>
         </ul>
       </div>
     </div>

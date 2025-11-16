@@ -25,6 +25,7 @@ Try it yourself! Test all the examples with Ctrl+F and see the differences in re
 - [Techniques Comparison](#techniques-comparison)
 - [Browser Compatibility](#browser-compatibility)
 - [Key Learnings](#key-learnings)
+- [React-Specific Implementation Notes](#-react-specific-implementation-notes)
 
 ---
 
@@ -122,17 +123,19 @@ This project demonstrates **8 different approaches** across 3 component types:
 - **Problem:** Content not searchable
 - **Result:** SEO ⚠️ | Ctrl+F ❌
 
-#### ⚠️ AccordionCorrect (Experimental - Rarely Works)
+#### ✅ AccordionCorrect (Modern with Auto-Reveal)
 
 - **Technique:** `hidden="until-found"` + `beforematch` event
-- **Reality:** Auto-reveal is extremely buggy and unreliable
-- **Result:** SEO ✅ | Ctrl+F ✅ | Auto-reveal ❌ (experimental only)
+- **Benefit:** Auto-expands when Ctrl+F finds hidden content
+- **Caveat:** Requires direct DOM manipulation (React props don't work), limited browser support
+- **Result:** SEO ✅ | Ctrl+F ✅ | Auto-reveal ✅ (Chrome 102+, Edge 102+, Safari 17+, Firefox 139+)
 
-#### ✅ AccordionCorrectOffScreen (RECOMMENDED)
+#### ✅ AccordionCorrectOffScreen (RECOMMENDED FOR UNIVERSAL COMPATIBILITY)
 
 - **Technique:** `position: absolute` + off-screen
-- **Benefit:** Works in all browsers
-- **Result:** SEO ✅ | Ctrl+F ✅
+- **Benefit:** Works in ALL browsers, no auto-reveal
+- **Caveat:** Matches found but not visually shown (content positioned off-screen)
+- **Result:** SEO ✅ | Ctrl+F ✅ | Auto-reveal ❌
 
 ### 3. Modal Component (2 variations)
 
@@ -164,7 +167,8 @@ This project demonstrates **8 different approaches** across 3 component types:
 
 - Never use conditional rendering for SEO-critical content
 - Avoid display: none for searchable content
-- Don't rely on hidden="until-found" for production (experimental)
+- Don't use hidden="until-found" without checking browser compatibility
+- Don't pass hidden="until-found" as React props (use setAttribute instead)
 - Never hide content that Google needs to index
 
 ### 🧪 How to Verify Your Implementation:
@@ -264,9 +268,12 @@ No installation required! Try all examples directly in your browser.
 
 1. Select **Accordion** component
 2. Choose "Correct (hidden='until-found')" approach
-3. Press **Ctrl+F** and search for "fuel economy"
-4. Watch as the accordion **automatically expands!** 🎉
-5. This is the `beforematch` event in action
+3. **Ensure you're using a supported browser:** Chrome 102+, Edge 102+, Safari 17+, or Firefox 139+
+4. Press **Ctrl+F** and search for "fuel economy"
+5. Watch as the accordion **automatically expands!** 🎉
+6. This is the `beforematch` event in action - check browser console for event logs
+
+**Note:** If you're using an older browser or Firefox < 139, the auto-reveal won't work. Try the "Correct (Off-Screen)" approach instead for universal compatibility.
 
 ---
 
@@ -302,14 +309,32 @@ No installation required! Try all examples directly in your browser.
 
 ```jsx
 // ✅ CORRECT - Auto-reveals on search
-<div ref={contentRef} hidden={isOpen ? false : "until-found"}>
+// IMPORTANT: Must use setAttribute, React props don't work!
+<div
+  ref={el => {
+    contentRef.current = el;
+    if (el) {
+      if (!isOpen) {
+        el.setAttribute('hidden', 'until-found');
+      } else {
+        el.removeAttribute('hidden');
+      }
+    }
+  }}
+>
   <p>Content here...</p>
 </div>;
 
 useEffect(() => {
-  contentRef.current?.addEventListener("beforematch", () => {
+  const handleBeforeMatch = () => {
     setIsOpen(true); // Auto-expand!
-  });
+  };
+
+  contentRef.current?.addEventListener("beforematch", handleBeforeMatch);
+
+  return () => {
+    contentRef.current?.removeEventListener("beforematch", handleBeforeMatch);
+  };
 }, []);
 ```
 
@@ -330,14 +355,16 @@ useEffect(() => {
 
 ## 📊 Techniques Comparison
 
-| Technique                           | In DOM? | SEO Indexed? | Ctrl+F Works?           | Use Case               |
-| ----------------------------------- | ------- | ------------ | ----------------------- | ---------------------- |
-| **Conditional Rendering**           | ❌ No   | ❌ No        | ❌ No                   | Avoid for SEO content  |
-| **display: none**                   | ✅ Yes  | ⚠️ Partial   | ❌ No                   | Avoid for SEO content  |
-| **position: absolute + off-screen** | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Tabs, Modals (Classic) |
-| **clip-path: inset(50%)**           | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Tabs (Modern)          |
-| **hidden="until-found"**            | ✅ Yes  | ✅ Yes       | ⚠️ Experimental (buggy) | Educational only       |
-| **inert attribute**                 | ✅ Yes  | ✅ Yes       | ✅ Yes                  | Modals (Modern)        |
+| Technique                           | In DOM? | SEO Indexed? | Ctrl+F Works?           | Auto-Reveal? | Use Case               |
+| ----------------------------------- | ------- | ------------ | ----------------------- | ------------ | ---------------------- |
+| **Conditional Rendering**           | ❌ No   | ❌ No        | ❌ No                   | N/A          | Avoid for SEO content  |
+| **display: none**                   | ✅ Yes  | ⚠️ Partial   | ❌ No                   | N/A          | Avoid for SEO content  |
+| **position: absolute + off-screen** | ✅ Yes  | ✅ Yes       | ✅ Yes (not visible)    | ❌ No        | Universal compatibility |
+| **clip-path: inset(50%)**           | ✅ Yes  | ✅ Yes       | ✅ Yes                  | ❌ No        | Tabs (Modern)          |
+| **hidden="until-found"**            | ✅ Yes  | ✅ Yes       | ✅ Yes                  | ✅ Yes*      | Modern browsers only (needs setAttribute) |
+| **inert attribute**                 | ✅ Yes  | ✅ Yes       | ✅ Yes                  | N/A          | Modals (Modern)        |
+
+*Requires Chrome 102+, Edge 102+, Safari 17+, or Firefox 139+
 
 ---
 
@@ -350,12 +377,18 @@ useEffect(() => {
 | Chrome  | 102+    | ✅ Supported (May 2022)  |
 | Edge    | 102+    | ✅ Supported (May 2022)  |
 | Safari  | 17+     | ✅ Supported (Sept 2023) |
-| Firefox | TBD     | ⚠️ In development        |
+| Firefox | 139+    | ✅ Supported (2025)      |
 
-**⚠️ REALITY CHECK:**
-Even in "supported" browsers, `hidden="until-found"` is extremely buggy and unreliable. Auto-reveal rarely works in practice.
+**⚠️ IMPORTANT IMPLEMENTATION NOTES:**
 
-**RECOMMENDED:** Use the Off-Screen technique (`AccordionCorrectOffScreen`) for production - it works reliably in ALL browsers.
+- **React Integration:** The attribute MUST be set using `element.setAttribute('hidden', 'until-found')`. Passing it as a React prop doesn't work correctly.
+- **Event Listeners:** The `beforematch` event must be attached after the component mounts to ensure auto-reveal functionality.
+- **Browser Support:** Works reliably in modern browsers (Chrome 102+, Edge 102+, Safari 17+, Firefox 139+).
+- **Fallback:** For broader compatibility, use the off-screen technique (`AccordionCorrectOffScreen`).
+
+**RECOMMENDATION:**
+- Use `hidden="until-found"` for modern projects targeting recent browser versions with auto-reveal UX
+- Use off-screen technique for universal browser support (works everywhere, but no auto-reveal)
 
 ### inert Attribute Support
 
@@ -388,10 +421,19 @@ Even in "supported" browsers, `hidden="until-found"` is extremely buggy and unre
 
 #### For Accordions:
 
-- **RECOMMENDED:** Use `position: absolute + off-screen` (reliable, works everywhere)
-- `hidden="until-found"` is experimental and rarely works in practice
-- Auto-reveal feature is buggy even in "supported" browsers
-- For production: Always use the off-screen technique
+**Two solid approaches depending on your needs:**
+
+1. **Modern with Auto-Reveal:** `hidden="until-found"` + `beforematch` event
+   - ✅ Best UX - automatically expands when user searches
+   - ⚠️ Requires setAttribute (React props don't work)
+   - ⚠️ Only works in Chrome 102+, Edge 102+, Safari 17+, Firefox 139+
+   - Use when: Targeting modern browsers and want premium UX
+
+2. **Universal Compatibility:** `position: absolute + off-screen`
+   - ✅ Works in ALL browsers without exception
+   - ✅ Simple to implement
+   - ⚠️ Text found but not auto-revealed (stays off-screen)
+   - Use when: Need maximum browser compatibility
 
 #### For Modals:
 
@@ -399,6 +441,65 @@ Even in "supported" browsers, `hidden="until-found"` is extremely buggy and unre
 - Use `inert` attribute when closed (disables interaction)
 - Use `aria-hidden` for accessibility
 - Prevent body scroll when open
+
+---
+
+## ⚛️ React-Specific Implementation Notes
+
+### Why React Props Don't Work with hidden="until-found"
+
+When implementing `hidden="until-found"` in React, you **cannot** use the standard prop syntax:
+
+```jsx
+// ❌ DOESN'T WORK - React converts this incorrectly
+<div hidden={isOpen ? false : "until-found"}>
+  Content
+</div>
+```
+
+**The Problem:** React's attribute handling doesn't properly set the `"until-found"` string value. The browser receives an incorrect attribute value, so `beforematch` events never fire.
+
+**The Solution:** Use `setAttribute` directly in the ref callback:
+
+```jsx
+// ✅ WORKS - Direct DOM manipulation
+<div
+  ref={el => {
+    if (el) {
+      if (!isOpen) {
+        el.setAttribute('hidden', 'until-found');
+      } else {
+        el.removeAttribute('hidden');
+      }
+    }
+  }}
+>
+  Content
+</div>
+```
+
+### Event Listener Timing
+
+The `beforematch` event listeners must be attached **after** the refs are assigned. Use `setTimeout` in `useEffect`:
+
+```jsx
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    contentRefs.current.forEach((ref, index) => {
+      if (ref) {
+        ref.addEventListener('beforematch', handleBeforeMatch);
+      }
+    });
+  }, 0);
+
+  return () => {
+    clearTimeout(timeoutId);
+    // cleanup listeners
+  };
+}, [items]);
+```
+
+This ensures refs are ready before attaching event listeners.
 
 ---
 
@@ -420,12 +521,15 @@ This project successfully demonstrates:
 ✅ 8 different implementation approaches
 ✅ 3 component types (Tabs, Accordion, Modal)
 ✅ Modern HTML features (`hidden="until-found"`, `inert`)
+✅ Working auto-reveal with `beforematch` event
+✅ React-specific implementation challenges and solutions
 ✅ Classic fallback techniques (off-screen positioning)
-✅ Interactive navigation system
+✅ Interactive navigation system with live examples
 ✅ Comprehensive comparison table
 ✅ SEO best practices
 ✅ Accessibility considerations
 ✅ Browser compatibility strategies
+✅ Practical implementation patterns for production use
 
 ---
 
