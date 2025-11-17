@@ -1,19 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import "../../styles/accordion.css";
 
-function AccordionCorrect() {
+function AccordionCorrect({ enableCrossComponentEvents = false }) {
   const [openItems, setOpenItems] = useState(new Set());
-  const [browserSupport, setBrowserSupport] = useState(null);
   const contentRefs = useRef([]);
-
-  // Check browser support
-  useEffect(() => {
-    const testDiv = document.createElement('div');
-    testDiv.hidden = 'until-found';
-    const isSupported = testDiv.hidden === 'until-found';
-    setBrowserSupport(isSupported);
-    console.log('Browser supports hidden="until-found":', isSupported);
-  }, []);
 
   const items = [
     {
@@ -43,19 +33,23 @@ function AccordionCorrect() {
       contentRefs.current.forEach((ref, index) => {
         if (ref) {
           const handleBeforeMatch = (event) => {
-            console.log(`beforematch event fired for item ${index}`, event);
             // Automatically open the accordion item when found via Ctrl+F
             setOpenItems(prev => {
               const newSet = new Set(prev);
               newSet.add(index);
-              console.log(`Opening accordion item ${index}`, newSet);
               return newSet;
             });
+
+            // Dispatch custom event to notify other components (only in real app)
+            if (enableCrossComponentEvents) {
+              window.dispatchEvent(new CustomEvent('content-found', {
+                detail: { component: 'accordion', item: index }
+              }));
+            }
           };
 
           ref.addEventListener('beforematch', handleBeforeMatch);
           handlers.push({ ref, handler: handleBeforeMatch });
-          console.log(`Added beforematch listener to accordion item ${index}`);
         }
       });
     }, 0);
@@ -74,11 +68,21 @@ function AccordionCorrect() {
   const toggleItem = (index) => {
     setOpenItems(prev => {
       const newSet = new Set(prev);
+      const isOpening = !newSet.has(index);
+
       if (newSet.has(index)) {
         newSet.delete(index);
       } else {
         newSet.add(index);
       }
+
+      // Notify other components when user manually opens accordion (only in real app)
+      if (enableCrossComponentEvents && isOpening) {
+        window.dispatchEvent(new CustomEvent('content-found', {
+          detail: { component: 'accordion', item: index, manual: true }
+        }));
+      }
+
       return newSet;
     });
   };

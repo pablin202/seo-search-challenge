@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import "./App.css";
 
 // Tabs Components
@@ -10,6 +11,7 @@ import TabsCorrectClip from "./components/tabs/TabsCorrectClip";
 import AccordionWrong from "./components/accordion/AccordionWrong";
 import AccordionCorrect from "./components/accordion/AccordionCorrect";
 import AccordionCorrectOffScreen from "./components/accordion/AccordionCorrectOffScreen";
+import AccordionSemantic from "./components/accordion/AccordionSemantic";
 
 // Modal Components
 import ModalWrong from "./components/modal/ModalWrong";
@@ -34,6 +36,8 @@ function App() {
       // ACCORDIONS
       case 'accordion-wrong':
         return <AccordionWrong />;
+      case 'accordion-semantic':
+        return <AccordionSemantic />;
       case 'accordion-correct':
         return <AccordionCorrect />;
       case 'accordion-correct-offscreen':
@@ -55,19 +59,20 @@ function App() {
       case 'tabs':
         return [
           { value: 'wrong', label: '❌ Wrong (Conditional Rendering)' },
-          { value: 'correct', label: '✅ Correct (Off-Screen)' },
+          { value: 'correct', label: '✅ Correct (Auto-Switch)' },
           { value: 'correct-clip', label: '✅ Correct (Clip-Path)' }
         ];
       case 'accordion':
         return [
           { value: 'wrong', label: '❌ Wrong (Display None)' },
+          { value: 'semantic', label: '🏆 BEST - Semantic <details>' },
           { value: 'correct', label: '✅ Correct (hidden="until-found")' },
           { value: 'correct-offscreen', label: '✅ Correct (Off-Screen)' }
         ];
       case 'modal':
         return [
           { value: 'wrong', label: '❌ Wrong (Conditional Rendering)' },
-          { value: 'correct', label: '✅ Correct (Inert Attribute)' }
+          { value: 'correct', label: '✅ Correct (Auto-Open)' }
         ];
       default:
         return [];
@@ -87,6 +92,11 @@ function App() {
         <div className="subtitle">
           Performance Improvement Plan (PIP) - Final Project
         </div>
+        <nav style={{ marginTop: '20px' }}>
+          <Link to="/real-app" style={{ padding: '12px 24px', background: '#2e7d32', color: 'white', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px' }}>
+            🚀 View Real Application Example →
+          </Link>
+        </nav>
       </header>
 
       <main>
@@ -226,18 +236,25 @@ function App() {
                   <td>✅ Yes</td>
                   <td>Tabs (Modern)</td>
                 </tr>
+                <tr className="correct-row" style={{ background: '#e8f5e9', fontWeight: 'bold' }}>
+                  <td><code>&lt;details&gt; + &lt;summary&gt;</code></td>
+                  <td>✅ Yes</td>
+                  <td>✅ Yes</td>
+                  <td>✅ Yes + Native Auto-reveal</td>
+                  <td>🏆 Accordions (BEST!)</td>
+                </tr>
                 <tr className="correct-row">
                   <td><code>hidden="until-found"</code></td>
                   <td>✅ Yes</td>
                   <td>✅ Yes</td>
                   <td>✅ Yes + Auto-reveal</td>
-                  <td>Accordions (Best!)</td>
+                  <td>Accordions (Modern)</td>
                 </tr>
                 <tr className="correct-row">
-                  <td><code>inert attribute</code></td>
+                  <td><code>hidden="until-found"</code></td>
                   <td>✅ Yes</td>
                   <td>✅ Yes</td>
-                  <td>✅ Yes</td>
+                  <td>✅ Yes + Auto-open</td>
                   <td>Modals (Modern)</td>
                 </tr>
               </tbody>
@@ -251,10 +268,10 @@ function App() {
                 <strong>For Tabs:</strong> Use position: absolute + off-screen or clip-path technique
               </li>
               <li>
-                <strong>For Accordions:</strong> Use <code>hidden="until-found"</code> with <code>beforematch</code> event (best UX!)
+                <strong>For Accordions:</strong> Use semantic <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> elements (native, works everywhere!)
               </li>
               <li>
-                <strong>For Modals:</strong> Always render in DOM, use <code>inert</code> attribute when closed
+                <strong>For Modals:</strong> Use <code>hidden="until-found"</code> with <code>beforematch</code> event (auto-opens when content found!)
               </li>
               <li>
                 <strong>General Rule:</strong> If content should be indexed by Google, keep it in the DOM

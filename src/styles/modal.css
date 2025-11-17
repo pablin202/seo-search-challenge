@@ -64,6 +64,9 @@
   justify-content: center;
   z-index: 1000;
   transition: opacity 0.3s ease;
+  /* Default: hidden (when using hidden="until-found") */
+  opacity: 0;
+  pointer-events: none;
 }
 
 .modal-overlay.visible {
@@ -74,6 +77,11 @@
 .modal-overlay.hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+/* When browser reveals content with hidden="until-found", ensure it's visible */
+.modal-overlay:not([hidden]) {
+  /* This selector applies when hidden attribute is removed by browser or React */
 }
 
 /* Inert styling for when modal is closed */

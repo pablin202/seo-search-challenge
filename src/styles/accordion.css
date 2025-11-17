@@ -102,6 +102,76 @@
 /* For hidden="until-found" approach - browser handles most styling */
 /* NO CSS needed - browser handles hidden="until-found" natively */
 
+/* Semantic Accordion using <details> and <summary> */
+.semantic-accordion {
+  margin: 20px 0;
+}
+
+.semantic-details {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.semantic-details[open] {
+  background: #f9f9f9;
+}
+
+.semantic-summary {
+  width: 100%;
+  padding: 15px 20px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  list-style: none;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.semantic-summary::-webkit-details-marker {
+  display: none;
+}
+
+.semantic-summary:hover {
+  background: #f5f5f5;
+}
+
+.semantic-details[open] .semantic-summary {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.semantic-icon {
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+  min-width: 20px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.semantic-details[open] .semantic-icon {
+  transform: rotate(45deg);
+  color: #1976d2;
+}
+
+.semantic-content {
+  padding: 0 20px;
+  background: #fafafa;
+}
+
+.semantic-content p {
+  padding: 15px 0;
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
 /* Explanation boxes */
 .problem-explanation {
   margin-top: 20px;
